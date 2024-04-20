@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stopwatch</title>
+  <style>
+    /* CSS styles */
+    body {
+      font-family: Arial, sans-serif;
+    }
+    button {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+  <script type="text/babel">
+    // ReactJS code
+    const { useState, useEffect } = React;
+
+
+    function Stopwatch() {
+      const [timer, setTimer] = useState(0);
+      const [isActive, setIsActive] = useState(false);
+
+
+      useEffect(() => {
+        let interval;
+        if (isActive) {
+          interval = setInterval(() => {
+            setTimer((prevTimer) => prevTimer + 1);
+          }, 1000);
+        } else {
+          clearInterval(interval);
+        }
+        return () => clearInterval(interval);
+      }, [isActive]);
+
+
+      const handleStart = () => {
+        setIsActive(true);
+      };
+
+
+      const handlePause = () => {
+        setIsActive(false);
+      };
+
+
+      const handleReset = () => {
+        setIsActive(false);
+        setTimer(0);
+      };
+
+
+      return (
+        <div>
+          <h1>Stopwatch</h1>
+          <div>
+            <p>{timer}s</p>
+          </div>
+          <div>
+            {!isActive ? (
+              <button onClick={handleStart}>Start</button>
+            ) : (
+              <button onClick={handlePause}>Pause</button>
+            )}
+            <button onClick={handleReset}>Reset</button>
+          </div>
+        </div>
+      );
+    }
+
+
+    ReactDOM.render(<Stopwatch />, document.getElementById('root'));
+  </script>
+</body>
+</html>
